@@ -13,23 +13,36 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: test1-1
-      id: test1-1
+    - name: t1-1
+      id: t1-1
       uses: classroom-resources/autograding-io-grader@v1
       with:
-        test-name: test1-1
+        test-name: t1-1
         setup-command: gcc ./code/1-1.c -o a
         command: "./a ./code/myfile.txt"
+        input: " "
+        expected-output: "The sun rose slowly over the distant mountains, \n\n"
+        comparison-method: contains
+        timeout: 10
+        max-score: 1
+    - name: t1-2
+      id: t1-2
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: t1-2
+        setup-command: gcc ./code/1-2.c -o ./a
+        command: "./a ./code/myfile.txt ./code/myfile2.txt"
         input: ''
-        expected-output: |
-          The sun rose slowly over the distant mountains, 
-          
+        expected-output: "The sun rose slowly over the distant mountains, \n\nThe
+          road ahead curved gently to the left and disappeared into a dense forest.
+          \n\n"
         comparison-method: contains
         timeout: 10
         max-score: 1
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
       env:
-        TEST1-1_RESULTS: "${{steps.test1-1.outputs.result}}"
+        T1-1_RESULTS: "${{steps.t1-1.outputs.result}}"
+        T1-2_RESULTS: "${{steps.t1-2.outputs.result}}"
       with:
-        runners: test1-1
+        runners: t1-1,t1-2
